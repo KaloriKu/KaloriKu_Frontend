@@ -87,7 +87,6 @@ export const UserContextProvider: React.FC<ChildrenProps> = ({
 
     const data = await response.json();
     if (response.status == 200) {
-      console.log(data);
       update(data);
       setIsAuthenticated(true);
       router.replace("/");
@@ -109,24 +108,24 @@ export const UserContextProvider: React.FC<ChildrenProps> = ({
 
     const data = await response.json();
     if (response.status == 200){
-      console.log(data);
       update(data);
       setIsAuthenticated(true);
     }
     else{
       localStorage.clear()
     }
+    setIsLoading(false);
   }
 
   useEffect(() => {
     if (!initialized.current) {
+      setIsLoading(true);
       initialized.current = true;
       const refresh = localStorage.getItem('refresh') ?? '';
       if (refresh){
-        refreshAccessToken(refresh)
+        refreshAccessToken(refresh);
       }
     }
-    setIsLoading(false);
   }, []);
 
   if (isLoading) {
@@ -135,9 +134,8 @@ export const UserContextProvider: React.FC<ChildrenProps> = ({
 
       </main>
     )
-  }
-
-  if (!isAuthenticated && (pathname != '/login' && pathname != '/register')) {
+  } else if (!isAuthenticated && (pathname != '/login' && pathname != '/register')) {
+    console.log('aaa');
     return (
       <main>
         <UnauthenticatedComponent />

@@ -14,11 +14,10 @@ const Login = () => {
       "username": email,
       "password": password
     })
-    console.log("aaaa")
   };
 
   return (
-    <div>
+    <div style={{'padding': '80px'}}>
       <h1>Login</h1>
       <form>
         <label>

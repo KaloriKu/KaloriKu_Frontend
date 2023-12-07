@@ -1,40 +1,103 @@
 "use client"
 
+import { Center, CircularProgress, Heading, SimpleGrid, Box, Flex, Spacer, IconButton, useDisclosure, Text } from '@chakra-ui/react';
 import { useUserContext } from "@/modules/auth/UserContext";
-import { useEffect, useRef } from 'react';
+import { useDaftarMakananContext } from '@/modules/makanan/DaftarMakananContext';
+import { useEffect, useRef, useState } from 'react';
+import MakananBox from '@/modules/makanan/MakananBox';
+import { FaPlus, FaAngleLeft } from "react-icons/fa6";
+import AddMakananSayaModal from '@/modules/makanan/AddMakananSayaModal';
+import { comfortaa } from '@/common/Style';
+import { useRouter } from 'next/navigation';
 
 const Makanan = () => {
-  const { authFetch } = useUserContext();
+  const [clientWindowHeight, setClientWindowHeight] = useState(300);
+  const [itemsAmount, setItemsAmount] = useState(32);
+  const { isAuthenticated } = useUserContext();
+  const { allMakanan, allMakananSaya, isLoading, fetchDaftarMakanan } = useDaftarMakananContext();
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const initialized = useRef(false);
-  
-  const getDaftarMakanan = async () => {
-    const response = await authFetch(
-      process.env.NEXT_PUBLIC_API_URL +
-      '/api/v1/makanan/all', {
-      method: 'GET',
-    }
-    );
+  const router = useRouter();
 
-    const data = await response.json();
-    console.log(data);
-    if (response.status == 200) {
-      //TODO
-    } else {
-
+  const handleScroll = () => {
+    if (window.scrollY >= clientWindowHeight) {
+      setClientWindowHeight(window.scrollY)
+      setItemsAmount(itemsAmount + 12);
     }
+  };
+
+  const back = () => {
+    router.back();
   }
 
   useEffect(() => {
-    if (!initialized.current) {
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  });
+
+  useEffect(() => {
+    if (!initialized.current && isAuthenticated) {
       initialized.current = true;
-      getDaftarMakanan();
+      fetchDaftarMakanan();
     }
   }, []);
 
+  if (isLoading)
+    return (
+      <Center>
+        <CircularProgress color={'white'} isIndeterminate />
+      </Center>
+    );
+
   return (
-    <div>
-      <p></p>
-    </div>
+    <>
+      <Box px={'80px'} pt={'80px'}>
+        <IconButton
+          aria-label='Back'
+          onClick={back}
+          icon={<FaAngleLeft />}
+        />
+        <Flex pt={'20px'}>
+          <Heading as='u' fontSize={'26px'} className={comfortaa.className}>
+            Makanan Saya
+          </Heading>
+          <Spacer />
+          <IconButton
+            colorScheme='green'
+            aria-label='Add Makanan Saya'
+            onClick={onOpen}
+            icon={<FaPlus />}
+          />
+        </Flex>
+        <AddMakananSayaModal
+          isOpen={isOpen}
+          onClose={onClose} />
+        {allMakananSaya.length == 0 ?
+          <Center><Text py='10px'>{'Belum ada makanan kamu yang disimpan'}</Text></Center> :
+          <SimpleGrid
+            gap={'30px'}
+            minChildWidth='250px'
+            pb={'20px'}
+            pt={'20px'}>
+            {allMakananSaya.map((makanan) => (
+              <MakananBox key={makanan.nama} makanan={makanan} />
+            ))}
+          </SimpleGrid>
+        }
+        <Heading as='u' fontSize={'26px'} className={comfortaa.className} pt={'20px'}>
+          Semua Makanan
+        </Heading>
+        <SimpleGrid
+            gap={'30px'}
+            minChildWidth='250px'
+            pb={'20px'}
+            pt={'20px'}>
+          {allMakanan.slice(0, itemsAmount).map((makanan) => (
+            <MakananBox key={makanan.nama} makanan={makanan} />
+          ))}
+        </SimpleGrid>
+      </Box>
+    </>
   );
 };
 
