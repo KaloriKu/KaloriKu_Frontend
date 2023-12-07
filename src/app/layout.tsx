@@ -1,9 +1,10 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
 import './globals.css'
 import { UserContextProvider } from '@/modules/auth/UserContext'
-
-const inter = Inter({ subsets: ['latin'] })
+import { DaftarMakananContextProvider } from '@/modules/makanan/DaftarMakananContext'
+import Navbar from '@/modules/Navbar'
+import { ChakraProvider } from '@chakra-ui/react'
+import { inter } from '@/common/Style'
 
 export const metadata: Metadata = {
   title: 'KaloriKu',
@@ -21,9 +22,14 @@ export default function RootLayout({
         <title>KaloriKu</title>
       </head>
       <body className={inter.className}>
-        <UserContextProvider>
-          {children}
-        </UserContextProvider>
+        <ChakraProvider>
+          <UserContextProvider>
+            <DaftarMakananContextProvider>
+              <Navbar />
+              {children}
+            </DaftarMakananContextProvider>
+          </UserContextProvider>
+        </ChakraProvider>
       </body>
     </html>
   )

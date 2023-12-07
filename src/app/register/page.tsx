@@ -19,7 +19,7 @@ const Register = () => {
   };
 
   return (
-    <div>
+    <div style={{'padding': '80px'}}>
       <h1>Register</h1>
       <form>
         <label>
