@@ -4,7 +4,6 @@ import ChildrenProps from '@/common/types/ChildrenProps';
 import { createContext, useContext, useEffect, useState, useRef } from 'react';
 import { UserData } from '@/common/types/UserData';
 import { authenticatedFetch } from '../../common/types/AuthenticatedFetch';
-import { setCookie } from 'nookies';
 import { useRouter, usePathname } from 'next/navigation';
 import UnauthenticatedComponent from './UnauthenticatedComponent';
 
@@ -41,14 +40,6 @@ export const UserContextProvider: React.FC<ChildrenProps> = ({
   const update = (query: any) => {
     const access = query['access']
     const refresh = query['refresh']
-    setCookie(null, 'access', access, {
-      maxAge: 30 * 24 * 60 * 60,
-      path: '/',
-    });
-    setCookie(null, 'refresh', refresh, {
-      maxAge: 30 * 24 * 60 * 60,
-      path: '/',
-    });
     localStorage.setItem('access', access);
     localStorage.setItem('refresh', refresh);
     setAccess(access);
@@ -105,18 +96,34 @@ export const UserContextProvider: React.FC<ChildrenProps> = ({
     }
   }
 
+  const refreshAccessToken = async (query:any) => {
+    const response = await fetch(
+      process.env.NEXT_PUBLIC_API_URL +
+      '/api/v1/authentication/refresh', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        refresh: query,
+      })
+    })
+
+    const data = await response.json();
+    if (response.status == 200){
+      console.log(data);
+      update(data);
+      setIsAuthenticated(true);
+    }
+    else{
+      localStorage.clear()
+    }
+  }
+
   useEffect(() => {
     if (!initialized.current) {
       initialized.current = true;
-      const access = localStorage.getItem('access') ?? '';
       const refresh = localStorage.getItem('refresh') ?? '';
-      if (access != '') {
-        setAccess(access);
-        setIsAuthenticated(true);
-      }
-      if (refresh != '') {
-        setRefresh(refresh);
-        setIsAuthenticated(true);
+      if (refresh){
+        refreshAccessToken(refresh)
       }
     }
     setIsLoading(false);
@@ -125,7 +132,7 @@ export const UserContextProvider: React.FC<ChildrenProps> = ({
   if (isLoading) {
     return (
       <main>
-        
+
       </main>
     )
   }
