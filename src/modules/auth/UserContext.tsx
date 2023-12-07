@@ -96,14 +96,14 @@ export const UserContextProvider: React.FC<ChildrenProps> = ({
     }
   }
 
-  const refreshAccessToken = async () => {
+  const refreshAccessToken = async (query:any) => {
     const response = await fetch(
       process.env.NEXT_PUBLIC_API_URL +
       '/api/v1/authentication/refresh', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        refresh: localStorage.getItem('refresh'),
+        refresh: query,
       })
     })
 
@@ -113,6 +113,9 @@ export const UserContextProvider: React.FC<ChildrenProps> = ({
       update(data);
       setIsAuthenticated(true);
     }
+    else{
+      localStorage.clear()
+    }
   }
 
   useEffect(() => {
@@ -120,7 +123,7 @@ export const UserContextProvider: React.FC<ChildrenProps> = ({
       initialized.current = true;
       const refresh = localStorage.getItem('refresh') ?? '';
       if (refresh){
-        refreshAccessToken()
+        refreshAccessToken(refresh)
       }
     }
     setIsLoading(false);
