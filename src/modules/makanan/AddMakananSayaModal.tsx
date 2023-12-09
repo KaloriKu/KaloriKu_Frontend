@@ -28,10 +28,6 @@ const AddMakananModal: React.FC<AddMakananModalProps> = ({ isOpen, onClose }) =>
   }
 
   const addMakananSaya = async (query: any) => {
-    if (!numberValid) {
-      return
-    }
-
     const response = await authFetch(
       process.env.NEXT_PUBLIC_API_URL +
       '/api/v1/makanan/add', {
@@ -73,15 +69,6 @@ const AddMakananModal: React.FC<AddMakananModalProps> = ({ isOpen, onClose }) =>
     onClose();
   }
 
-  const check = (e: any) => {
-    const number = e.target.value;
-    if (number < 0) {
-      setNumberValid(false);
-    } else {
-      setNumberValid(true);
-    }
-  }
-
   return (
     <>
       <Modal
@@ -96,7 +83,7 @@ const AddMakananModal: React.FC<AddMakananModalProps> = ({ isOpen, onClose }) =>
           <ModalBody>
             <form onSubmit={handleSubmit(addMakananSaya)}>
               <FormControl pt='3px'>
-                <Text fontSize={'26px'} mb='15px' className={comfortaa.className}>Menambah Makanan Saya</Text>
+                <Text fontSize={'26px'} mb='15px' className={comfortaa.className} fontWeight={'bold'}>Menambah Makanan Saya</Text>
                 <Text mb='5px' mt='10px'>Nama Makanan</Text>
                 <Input mb='15px' {...register('nama')}
                   id='nama'
@@ -130,8 +117,8 @@ const AddMakananModal: React.FC<AddMakananModalProps> = ({ isOpen, onClose }) =>
                     isRequired
                     onMouseOver={over}
                     onMouseOut={out}
-                    onChange={check}
-                    step={0.01} />
+                    step={0.01}
+                    min={0} />
                   <Input mb='15px' {...register('jumlahLemak')}
                     id='jumlahLemak'
                     name='jumlahLemak'
@@ -146,8 +133,8 @@ const AddMakananModal: React.FC<AddMakananModalProps> = ({ isOpen, onClose }) =>
                     isRequired
                     onMouseOver={over}
                     onMouseOut={out}
-                    onChange={check}
-                    step={0.01} />
+                    step={0.01}
+                    min={0} />
                   <Input mb='15px' {...register('jumlahKarbohidrat')}
                     id='jumlahKarbohidrat'
                     name='jumlahKarbohidrat'
@@ -162,8 +149,8 @@ const AddMakananModal: React.FC<AddMakananModalProps> = ({ isOpen, onClose }) =>
                     isRequired
                     onMouseOver={over}
                     onMouseOut={out}
-                    onChange={check}
-                    step={0.01} />
+                    step={0.01}
+                    min={0} />
                   <Input mb='15px' {...register('jumlahProtein')}
                     id='jumlahProtein'
                     name='jumlahProtein'
@@ -178,8 +165,8 @@ const AddMakananModal: React.FC<AddMakananModalProps> = ({ isOpen, onClose }) =>
                     isRequired
                     onMouseOver={over}
                     onMouseOut={out}
-                    onChange={check}
-                    step={0.01} />
+                    step={0.01} 
+                    min={0} />
                 </Grid>
                 {numberValid ? '' : <Text color='red'>Jumlah harus positif</Text>}
                 <IconButton
