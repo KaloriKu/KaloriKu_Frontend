@@ -1,4 +1,6 @@
 import { useRouter } from 'next/navigation';
+import { Button, Text, AbsoluteCenter, Flex } from "@chakra-ui/react";
+import { Color, comfortaa } from '@/common/Style';
 
 const UnauthenticatedComponent = () => {
   const router = useRouter();
@@ -28,13 +30,26 @@ const UnauthenticatedComponent = () => {
   };
 
   return (
-    <div style={containerStyle}>
-      <h1 style={titleStyle}>KaloriKu</h1>
-      <div style={buttonContainerStyle}>
-        <button style={buttonStyle} onClick={(e) => { router.push('/register') }}>Register</button>
-        <button style={buttonStyle} onClick={(e) => { router.push('/login') }}>Login</button>
-      </div>
-    </div>)
+    <>
+      <AbsoluteCenter axis='both'>
+        <Flex direction={'column'} alignItems='center' justifyContent='center' gap='20px'>
+          <Text fontSize={'80px'} className={comfortaa.className} fontWeight={'bold'} color={Color.ONE}>KaloriKu</Text>
+          <Button
+            variant='outline'
+            colorScheme='orange'
+            onClick={() => { router.push('/register') }}
+            w='70%'>
+            Register
+          </Button>
+          <Button
+            colorScheme='orange'
+            onClick={() => { router.push('/login') }}
+            w='70%'>
+            Login
+          </Button>
+        </Flex>
+      </AbsoluteCenter>
+    </>)
 }
 
 export default UnauthenticatedComponent;

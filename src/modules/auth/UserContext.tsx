@@ -6,13 +6,14 @@ import { UserData } from '@/common/types/UserData';
 import { authenticatedFetch } from '../../common/types/AuthenticatedFetch';
 import { useRouter, usePathname } from 'next/navigation';
 import UnauthenticatedComponent from './UnauthenticatedComponent';
+import { useToast } from "@chakra-ui/react";
 
 interface UserValidateData {
   user: UserData | undefined;
   access: string;
   refresh: string;
   isAuthenticated: boolean;
-  register: (query: any) => Promise<void>;
+  registerUser: (query: any) => Promise<void>;
   login: (query: any) => Promise<void>;
   authFetch: (input: RequestInfo | URL, init?: RequestInit | undefined) => Promise<Response>
 }
@@ -34,6 +35,7 @@ export const UserContextProvider: React.FC<ChildrenProps> = ({
   const [refresh, setRefresh] = useState('');
   const router = useRouter();
   const pathname = usePathname();
+  const toast = useToast();
 
   const authFetch = authenticatedFetch;
 
@@ -46,7 +48,7 @@ export const UserContextProvider: React.FC<ChildrenProps> = ({
     setRefresh(refresh);
   };
 
-  const register = async (query: any) => {
+  const registerUser = async (query: any) => {
     const response = await fetch(
       process.env.NEXT_PUBLIC_API_URL +
       '/api/v1/authentication/register', {
@@ -67,8 +69,23 @@ export const UserContextProvider: React.FC<ChildrenProps> = ({
         "username": query['email'],
         "password": query['password']
       })
+      toast({
+        title: `Register`,
+        description: `Berhasil register akun Anda`,
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+        position: 'top',
+      })
     } else {
-
+      toast({
+        title: `Register`,
+        description: `Akun Anda sudah teregister`,
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+        position: 'top',
+      })
     }
   }
 
@@ -90,12 +107,27 @@ export const UserContextProvider: React.FC<ChildrenProps> = ({
       update(data);
       setIsAuthenticated(true);
       router.replace("/");
+      toast({
+        title: `Login`,
+        description: `Berhasil masuk ke akun Anda`,
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+        position: 'top',
+      })
     } else {
-
+      toast({
+        title: `Login`,
+        description: `Gagal masuk ke akun Anda`,
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+        position: 'top',
+      })
     }
   }
 
-  const refreshAccessToken = async (query:any) => {
+  const refreshAccessToken = async (query: any) => {
     const response = await fetch(
       process.env.NEXT_PUBLIC_API_URL +
       '/api/v1/authentication/refresh', {
@@ -107,11 +139,11 @@ export const UserContextProvider: React.FC<ChildrenProps> = ({
     })
 
     const data = await response.json();
-    if (response.status == 200){
+    if (response.status == 200) {
       update(data);
       setIsAuthenticated(true);
     }
-    else{
+    else {
       localStorage.clear()
     }
     setIsLoading(false);
@@ -122,8 +154,10 @@ export const UserContextProvider: React.FC<ChildrenProps> = ({
       setIsLoading(true);
       initialized.current = true;
       const refresh = localStorage.getItem('refresh') ?? '';
-      if (refresh){
+      if (refresh) {
         refreshAccessToken(refresh);
+      } else {
+        setIsLoading(false);
       }
     }
   }, []);
@@ -146,7 +180,7 @@ export const UserContextProvider: React.FC<ChildrenProps> = ({
   return (
     <UserContext.Provider
       value={{
-        user, access, refresh, isAuthenticated, register, login, authFetch
+        user, access, refresh, isAuthenticated, registerUser, login, authFetch
       }}
     >
       {children}

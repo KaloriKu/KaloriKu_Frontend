@@ -58,9 +58,9 @@ const Makanan = () => {
           icon={<FaAngleLeft />}
         />
         <Flex pt={'20px'}>
-          <Heading as='u' fontSize={'26px'} className={comfortaa.className}>
+          <Text fontSize={'26px'} className={comfortaa.className}>
             Makanan Saya
-          </Heading>
+          </Text>
           <Spacer />
           <IconButton
             colorScheme='green'
@@ -84,9 +84,9 @@ const Makanan = () => {
             ))}
           </SimpleGrid>
         }
-        <Heading as='u' fontSize={'26px'} className={comfortaa.className} pt={'20px'}>
+        <Text fontSize={'26px'} className={comfortaa.className} pt={'20px'}>
           Semua Makanan
-        </Heading>
+        </Text>
         <SimpleGrid
             gap={'30px'}
             minChildWidth='250px'
