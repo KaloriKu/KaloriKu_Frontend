@@ -96,7 +96,7 @@ const AddMakananModal: React.FC<AddMakananModalProps> = ({ isOpen, onClose }) =>
           <ModalBody>
             <form onSubmit={handleSubmit(addMakananSaya)}>
               <FormControl pt='3px'>
-                <Heading as='u' fontSize={'26px'} mb='15px' className={comfortaa.className}>Menambah Makanan Saya</Heading>
+                <Text fontSize={'26px'} mb='15px' className={comfortaa.className}>Menambah Makanan Saya</Text>
                 <Text mb='5px' mt='10px'>Nama Makanan</Text>
                 <Input mb='15px' {...register('nama')}
                   id='nama'

@@ -14,7 +14,7 @@ const Navbar = () => {
         position="fixed"
         w="100%"
         backgroundColor={Color.ONE}
-        backdropFilter="saturate(180%) blur(5px)">
+        shadow={'0px 10px 20px -12px rgba(255,151,71,1)'}>
         <Text className={comfortaa.className} as='b' color={'white'} fontSize={'24px'}>KaloriKu</Text>
       </Flex>
     </>
