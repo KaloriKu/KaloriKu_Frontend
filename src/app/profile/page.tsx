@@ -11,10 +11,13 @@ import { Icon } from '@chakra-ui/react'
 import { FaDumbbell } from "react-icons/fa";
 import { TfiEmail } from "react-icons/tfi";
 import { useEffect, useState } from "react";
+import { FaGenderless } from "react-icons/fa";
+import { BsGenderMale } from "react-icons/bs";
+import { TbGenderFemme } from "react-icons/tb";
 
 
 export default function Profile() {
-    const { user, access } = useUserContext()
+    const { user } = useUserContext()
     const [foto, setFoto] = useState<string | undefined>()
     const [padding, setPadding] = useState('0%');
     const router = useRouter()
@@ -22,6 +25,7 @@ export default function Profile() {
     useEffect(() => {
         if (user?.gender === 'Laki-laki') {
             setFoto('https://freepngimg.com/save/22654-man/594x600')
+
         }
         else if (user?.gender === 'Perempuan') {
             setFoto('https://static.vecteezy.com/system/resources/previews/008/472/913/original/portrait-of-beautiful-young-asian-woman-file-png.png')
@@ -76,18 +80,31 @@ export default function Profile() {
                                     </Text>
                                 </Box>
                             </Flex>
-
-
+                            <Flex>
+                                <Box w='10%'>
+                                    {(()=>{
+                                        if (user?.gender === null) return <Icon as={FaGenderless}/>
+                                        else if (user?.gender === 'Laki-laki') return <Icon as={BsGenderMale}/>
+                                        else return <Icon as={TbGenderFemme}/>
+                                    })()}
+                                </Box>
+                                <Box w='80%' mx={'5px'}>
+                                    <Text fontSize={'15px'} className={comfortaa.className} pt={'5px'}>
+                                        {user?.gender !== null ? user?.gender : '-'}
+                                    </Text>
+                                </Box>
+                            </Flex>
                             <Flex>
                                 <Box w='10%'>
                                     <Icon as={FaDumbbell} />
                                 </Box>
                                 <Box w='80%' mx={'5px'}>
                                     <Text fontSize={'15px'} className={comfortaa.className} pt={'5px'}>
-                                        {user?.berat_badan !== null ? user?.berat_badan : '-'} Kg
+                                        {user?.berat_badan !== null ? user?.berat_badan + " Kg": '-'}
                                     </Text>
                                 </Box>
                             </Flex>
+
 
 
                             <Button colorScheme='orange' mt={'150px'} onClick={editProfile}>Edit Profile</Button>
