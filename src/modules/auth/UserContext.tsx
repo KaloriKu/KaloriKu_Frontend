@@ -106,6 +106,7 @@ export const UserContextProvider: React.FC<ChildrenProps> = ({
     if (response.status == 200) {
       update(data);
       setIsAuthenticated(true);
+      await getUser(data['access'])
       router.replace("/");
       toast({
         title: `Login`,
@@ -127,6 +128,25 @@ export const UserContextProvider: React.FC<ChildrenProps> = ({
     }
   }
 
+  const getUser = async(query:any) => {
+    console.log(access)
+    const response = await fetch(
+      process.env.NEXT_PUBLIC_API_URL +
+      '/api/v1/profile', {
+      method: 'GET',
+      headers: { 
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${query}`
+      },
+      
+    })
+    
+    const data = await response.json();
+    if (response.status == 200){
+      setUser(data)
+    }
+  }
+
   const refreshAccessToken = async (query: any) => {
     const response = await fetch(
       process.env.NEXT_PUBLIC_API_URL +
@@ -142,12 +162,15 @@ export const UserContextProvider: React.FC<ChildrenProps> = ({
     if (response.status == 200) {
       update(data);
       setIsAuthenticated(true);
+      await getUser(data['access'])
     }
     else {
       localStorage.clear()
     }
     setIsLoading(false);
   }
+
+  
 
   useEffect(() => {
     if (!initialized.current) {
