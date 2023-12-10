@@ -14,12 +14,16 @@ import { useEffect, useState } from "react";
 import { FaGenderless } from "react-icons/fa";
 import { BsGenderMale } from "react-icons/bs";
 import { TbGenderFemme } from "react-icons/tb";
+import { FaCalendarAlt } from "react-icons/fa";
+import { CiRuler } from "react-icons/ci";
+import { CircularProgress, CircularProgressLabel } from '@chakra-ui/react'
 
 
 export default function Profile() {
     const { user } = useUserContext()
     const [foto, setFoto] = useState<string | undefined>()
-    const [padding, setPadding] = useState('0%');
+    const [ukuran, setUkuran] = useState<string>('0%')
+    const [padding, setPadding] = useState('0%')
     const router = useRouter()
 
     useEffect(() => {
@@ -34,15 +38,17 @@ export default function Profile() {
         const handleResize = () => {
             // Adjust padding based on screen width
             if (window.innerWidth > 1300) {
-                setPadding('20%');
+                setPadding('20%')
+                setUkuran('120px')
             } else {
-                setPadding('2%');
+                setPadding('2%')
+                setUkuran('10px')
             }
         };
 
         handleResize();
 
-        window.addEventListener('resize', handleResize);
+        window.addEventListener('resize', handleResize)
 
         return () => {
             window.removeEventListener('resize', handleResize);
@@ -82,10 +88,20 @@ export default function Profile() {
                             </Flex>
                             <Flex>
                                 <Box w='10%'>
-                                    {(()=>{
-                                        if (user?.gender === null) return <Icon as={FaGenderless}/>
-                                        else if (user?.gender === 'Laki-laki') return <Icon as={BsGenderMale}/>
-                                        else return <Icon as={TbGenderFemme}/>
+                                    <Icon as={FaCalendarAlt} />
+                                </Box>
+                                <Box w='80%' mx={'5px'}>
+                                    <Text fontSize={'15px'} className={comfortaa.className} pt={'5px'}>
+                                        {user?.umur !== null ? user?.umur : '-'}
+                                    </Text>
+                                </Box>
+                            </Flex>
+                            <Flex>
+                                <Box w='10%'>
+                                    {(() => {
+                                        if (user?.gender === null) return <Icon as={FaGenderless} />
+                                        else if (user?.gender === 'Laki-laki') return <Icon as={BsGenderMale} />
+                                        else return <Icon as={TbGenderFemme} />
                                     })()}
                                 </Box>
                                 <Box w='80%' mx={'5px'}>
@@ -100,13 +116,20 @@ export default function Profile() {
                                 </Box>
                                 <Box w='80%' mx={'5px'}>
                                     <Text fontSize={'15px'} className={comfortaa.className} pt={'5px'}>
-                                        {user?.berat_badan !== null ? user?.berat_badan + " Kg": '-'}
+                                        {user?.berat_badan !== null ? user?.berat_badan + " kg" : '-'}
                                     </Text>
                                 </Box>
                             </Flex>
-
-
-
+                            <Flex>
+                                <Box w='10%'>
+                                    <Icon as={CiRuler} />
+                                </Box>
+                                <Box w='80%' mx={'5px'}>
+                                    <Text fontSize={'15px'} className={comfortaa.className} pt={'5px'}>
+                                        {user?.tinggi_badan !== null ? user?.tinggi_badan + " cm" : '-'}
+                                    </Text>
+                                </Box>
+                            </Flex>
                             <Button colorScheme='orange' mt={'150px'} onClick={editProfile}>Edit Profile</Button>
                         </Flex>
                     </Box>
@@ -114,6 +137,9 @@ export default function Profile() {
                         <Text fontSize={'30px'} className={comfortaa.className} pt={'20px'} fontWeight={'bold'}>
                             {user?.nama}
                         </Text>
+                        <CircularProgress value={(parseInt(user!.tingkat_aktivitas))/5*100} color='green.400' size={ukuran}>
+                            <CircularProgressLabel>40%</CircularProgressLabel>
+                        </CircularProgress>
                     </Box>
                 </Flex>
             </Box>
