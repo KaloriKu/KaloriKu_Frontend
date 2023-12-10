@@ -77,6 +77,7 @@ export const UserContextProvider: React.FC<ChildrenProps> = ({
         isClosable: true,
         position: 'top',
       })
+      router.replace("/setup")
     } else {
       toast({
         title: `Register`,
