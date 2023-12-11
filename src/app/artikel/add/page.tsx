@@ -28,7 +28,7 @@ const addArtikel = () => {
     router.back();
   }
 
-  const addArtikel = async (query: any) => {
+  const AddArtikel = async (query: any) => {
     const response = await fetch(
       process.env.NEXT_PUBLIC_API_URL +
       '/api/v1/artikel/add', {
