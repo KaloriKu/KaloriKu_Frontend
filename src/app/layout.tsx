@@ -3,6 +3,7 @@ import './globals.css'
 import { UserContextProvider } from '@/modules/auth/UserContext'
 import { DaftarMakananContextProvider } from '@/modules/makanan/DaftarMakananContext'
 import { DaftarMakananDikonsumsiContextProvider } from '@/modules/makanan_dikonsumsi/DaftarMakananDikonsumsiContext'
+import { DaftarArtikelContextProvider } from '@/modules/artikel/DaftarArtikelContext'
 import Navbar from '@/modules/Navbar'
 import { ChakraProvider } from '@chakra-ui/react'
 import { inter } from '@/common/Style'
@@ -31,8 +32,10 @@ export default function RootLayout({
             <DaftarMakananContextProvider>
               <TargetContextProvider>
                 <DaftarMakananDikonsumsiContextProvider>
+                  <DaftarArtikelContextProvider>
                 <Navbar />
                 {children}
+                    </DaftarArtikelContextProvider>
                 </DaftarMakananDikonsumsiContextProvider>
               </TargetContextProvider>
             </DaftarMakananContextProvider>
