@@ -13,7 +13,7 @@ RUN npm install
 # Copy the rest of the application code
 COPY . .
 
-RUN echo "NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}" > .env.local
+RUN echo "NEXT_PUBLIC_API_URL=http://35.240.244.60:80" > .env.local
 
 # Expose the port that the application will run on
 EXPOSE 3000
