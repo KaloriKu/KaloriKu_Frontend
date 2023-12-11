@@ -1,6 +1,6 @@
 "use client"
 
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from 'react';
 import { useUserContext } from '@/modules/auth/UserContext';
 import { Box, Button, Center, FormControl, Heading, Text, Input, Select } from "@chakra-ui/react";
@@ -8,6 +8,7 @@ import { useForm } from 'react-hook-form';
 import { comfortaa } from '@/common/Style';
 import { useToast } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
+import { useSetupContext } from "@/modules/setup/SetupContext";
 
 const SetUp = () => {
   const { handleSubmit, register } = useForm();
@@ -15,6 +16,13 @@ const SetUp = () => {
   const { access } = useUserContext()
   const toast = useToast();
   const router = useRouter();
+  const { initialized } = useSetupContext();
+
+  useEffect(()=>{
+    if (initialized){
+      router.push('/')
+    }
+  },[])
 
   const over = () => {
     setIsHover(true);
@@ -52,7 +60,7 @@ const SetUp = () => {
         isClosable: true,
         position: 'top',
       })
-      router.replace("/dashboard")
+      window.location.reload()
     } else {
       toast({
         title: `Gagal`,

@@ -10,7 +10,7 @@ export default function Logout() {
     useEffect(()=>{
         if (isAuthenticated) {
             localStorage.clear();
-            router.push('/login')
+            window.location.reload();
         }
     }, [])
 

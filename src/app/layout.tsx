@@ -7,6 +7,7 @@ import Navbar from '@/modules/Navbar'
 import { ChakraProvider } from '@chakra-ui/react'
 import { inter } from '@/common/Style'
 import { TargetContextProvider } from '@/modules/target/TargetContext'
+import { SetupContextProvider } from '@/modules/setup/SetupContext'
 
 export const metadata: Metadata = {
   title: 'KaloriKu',
@@ -26,14 +27,16 @@ export default function RootLayout({
       <body className={inter.className}>
         <ChakraProvider>
           <UserContextProvider>
+          <SetupContextProvider>
             <DaftarMakananContextProvider>
               <TargetContextProvider>
                 <DaftarMakananDikonsumsiContextProvider>
                 <Navbar />
-              {children}
+                {children}
                 </DaftarMakananDikonsumsiContextProvider>
               </TargetContextProvider>
             </DaftarMakananContextProvider>
+            </SetupContextProvider>
           </UserContextProvider>
         </ChakraProvider>
       </body>

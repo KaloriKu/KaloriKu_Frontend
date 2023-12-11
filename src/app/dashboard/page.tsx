@@ -48,11 +48,9 @@ const Makanan = () => {
   const editTarget = () => {
     router.push('/dashboard/edit')
 }
-
   const addMakananDikonsumsi = () => {
     router.push('./makanan')
   }
-
   if (isLoading)
     return (
       <Center>
@@ -88,7 +86,7 @@ const Makanan = () => {
 
 
       </Box>
-      <Box px={'80px'} pt={'80px'}>
+            <Box px={'80px'} pt={'80px'}>
         <Text fontSize={'26px'} className={comfortaa.className} pt={'20px'} fontWeight={'bold'} mb='0'>
           Riwayat Makanan Dikonsumsi
         </Text>
