@@ -100,7 +100,7 @@ const MakananDikonsumsiBox: React.FC<MakananDikonsumsiBoxProps> = ({
         </Stack>
         
         <Collapse in={isOpen} animateOpacity>
-          {makananDikonsumsi.details.map((detail, index) => (
+          {makananDikonsumsi.details.map((detail: { nama: any; jumlahKalori: number; jumlahLemak: number; jumlahKarbohidrat: number; jumlahProtein: number; }, index: any) => (
             <Stack key={index} m='2' spacing='1' p='8px'>
               <Divider />
               <Grid templateColumns='auto 1fr' alignItems='flex-start'>
