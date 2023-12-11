@@ -244,9 +244,9 @@ export default function ProfileModule() {
                                         <>
                                             <Flex direction={'column'} gap={'5px'}>
                                                 <InputGroup>
-                                                    <InputLeftAddon children={(() => {
-                                                        return <Icon as={FaCalendarAlt} />
-                                                    })()} />
+                                                    <InputLeftAddon>
+                                                        <Icon as={FaCalendarAlt} />
+                                                    </InputLeftAddon>
                                                     <NumberInput step={1} defaultValue={user?.umur} onChange={(e) => { setUmur(parseInt(e)) }} style={{ width: '100%' }}>
                                                         <NumberInputField />
                                                         <NumberInputStepper>
@@ -256,20 +256,24 @@ export default function ProfileModule() {
                                                     </NumberInput>
                                                 </InputGroup>
                                                 <InputGroup>
-                                                    <InputLeftAddon children={(() => {
-                                                        if (user?.gender === null) return <Icon as={FaGenderless} />
-                                                        else if (user?.gender === 'Laki-laki') return <Icon as={BsGenderMale} />
-                                                        else return <Icon as={TbGenderFemme} />
-                                                    })()} />
+                                                    <InputLeftAddon>
+                                                        {(() => {
+                                                            if (user?.gender === null) return <Icon as={FaGenderless} />
+                                                            else if (user?.gender === 'Laki-laki') return <Icon as={BsGenderMale} />
+                                                            else return <Icon as={TbGenderFemme} />
+                                                        })()}
+                                                    </InputLeftAddon>
                                                     <Select defaultValue={user?.gender as string} onChange={(e) => { setGender(e.target.value) }} style={{ width: '100%' }}>
                                                         <option value='Laki-laki'>Laki-laki</option>
                                                         <option value='Perempuan'>Perempuan</option>
                                                     </Select>
                                                 </InputGroup>
                                                 <InputGroup>
-                                                    <InputLeftAddon children={(() => {
-                                                        return <Icon as={FaDumbbell} />
-                                                    })()} />
+                                                    <InputLeftAddon>
+                                                        {(() => {
+                                                            return <Icon as={FaDumbbell} />
+                                                        })()}
+                                                    </InputLeftAddon>
                                                     <NumberInput step={1} defaultValue={user?.berat_badan} onChange={(e) => { setBerat(parseInt(e)) }} style={{ width: '100%' }}>
                                                         <NumberInputField />
                                                         <NumberInputStepper>
@@ -279,9 +283,11 @@ export default function ProfileModule() {
                                                     </NumberInput>
                                                 </InputGroup>
                                                 <InputGroup>
-                                                    <InputLeftAddon children={(() => {
-                                                        return <Icon as={CiRuler} />
-                                                    })()} />
+                                                    <InputLeftAddon>
+                                                        {(() => {
+                                                            return <Icon as={CiRuler} />
+                                                        })()}
+                                                    </InputLeftAddon>
                                                     <NumberInput step={1} defaultValue={user?.tinggi_badan} onChange={(e) => { setTinggi(parseInt(e)) }} style={{ width: '100%' }}>
                                                         <NumberInputField />
                                                         <NumberInputStepper>
@@ -318,19 +324,27 @@ export default function ProfileModule() {
                                     <ModalBody>
                                         <Flex direction={'column'} gap={'5px'}>
                                             <InputGroup>
-                                                <InputLeftAddon children={<Icon as={FaPerson} />} />
+                                                <InputLeftAddon>
+                                                    {<Icon as={FaPerson} />}
+                                                </InputLeftAddon>
                                                 <Input id='form_nama' defaultValue={user?.nama} onChange={(e) => { setNama(e.target.value) }} />
                                             </InputGroup>
                                             <InputGroup>
-                                                <InputLeftAddon children={<Icon as={TfiEmail} />} />
+                                                <InputLeftAddon>
+                                                    {<Icon as={TfiEmail} />}
+                                                </InputLeftAddon>
                                                 <Input type='email' defaultValue={user?.user.email} onChange={(e) => { setEmail(e.target.value) }} />
                                             </InputGroup>
                                             <InputGroup>
-                                                <InputLeftAddon children={<Icon as={FaKey} />} />
-                                                    <Input type="password" onChange={(e) => { setPassword1(e.target.value) }} placeholder="Password" />
+                                                <InputLeftAddon>
+                                                    {<Icon as={FaKey} />}
+                                                </InputLeftAddon>
+                                                <Input type="password" onChange={(e) => { setPassword1(e.target.value) }} placeholder="Password" />
                                             </InputGroup>
                                             <InputGroup>
-                                                <InputLeftAddon children={<Icon as={FaCheck} />} />
+                                                <InputLeftAddon>
+                                                    {<Icon as={FaCheck} />}
+                                                </InputLeftAddon>
                                                 <FormControl isInvalid={!isPasswordError}>
                                                     <Input type="password" onChange={(e) => { setPassword2(e.target.value); }} placeholder="Confirm your password" />
                                                     {!isPasswordError ? <FormErrorMessage>Password must be the same</FormErrorMessage> : <></>}
