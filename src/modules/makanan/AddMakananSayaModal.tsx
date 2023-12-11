@@ -15,7 +15,6 @@ interface AddMakananModalProps {
 const AddMakananModal: React.FC<AddMakananModalProps> = ({ isOpen, onClose }) => {
   const { handleSubmit, register } = useForm();
   const [isHover, setIsHover] = useState(false);
-  const [numberValid, setNumberValid] = useState(true);
   const toast = useToast();
   const { authFetch } = useUserContext();
   const { fetchDaftarMakanan } = useDaftarMakananContext();
@@ -168,7 +167,6 @@ const AddMakananModal: React.FC<AddMakananModalProps> = ({ isOpen, onClose }) =>
                     step={0.01} 
                     min={0} />
                 </Grid>
-                {numberValid ? '' : <Text color='red'>Jumlah harus positif</Text>}
                 <IconButton
                   colorScheme='green'
                   aria-label='Search'

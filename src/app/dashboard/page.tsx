@@ -10,7 +10,7 @@ import { useDaftarMakananDikonsumsiContext } from '@/modules/makanan_dikonsumsi/
 import MakananDikonsumsiBox from '@/modules/makanan_dikonsumsi/MakananDikonsumsiBox';
 
 
-const Makanan = () => {
+const Dashboard = () => {
   const [clientWindowHeight, setClientWindowHeight] = useState(300);
   const [itemsAmount, setItemsAmount] = useState(32);
   const { isAuthenticated } = useUserContext();
@@ -108,4 +108,4 @@ const Makanan = () => {
   );
 };
 
-export default Makanan;
+export default Dashboard;

@@ -41,9 +41,7 @@ const Makanan = () => {
   };
 
   const addMakananDikonsumsi = async () => {
-    console.log(selectedMakananIds)
     if (selectedMakananIds.length === 0) {
-      console.log("here")
       toast({
         title: 'Error',
         description: 'Silakan pilih terlebih dahulu makanan yang ingin ditambahkan.',
@@ -54,9 +52,7 @@ const Makanan = () => {
       });
       return;
     }
-
-    console.log("fetch body")
-    console.log(JSON.stringify({makanan: selectedMakananIds}));
+    
     const response = await authFetch(
       process.env.NEXT_PUBLIC_API_URL +
       '/api/v1/makanan-dikonsumsi/add', {
@@ -69,14 +65,6 @@ const Makanan = () => {
       }),
     }
     );
-    console.log("after post")
-    console.log(response)
-
-    // const data = await response.json();
-    // console.log("data")
-    // console.log(data)
-    console.log("response")
-    console.log(response.status)
     
     if (response.status === 200) {
       toast({

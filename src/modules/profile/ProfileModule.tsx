@@ -128,7 +128,6 @@ export default function ProfileModule() {
         setIsLoading(true)
 
         const body: AccountData = {}
-        console.log(password1)
         if (!isNullOrEmptyString(nama)) body.nama = nama
         if (!isNullOrEmptyString(email) && !isSameAsUser(email)) {
             body.email = email
