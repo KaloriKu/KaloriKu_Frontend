@@ -26,8 +26,6 @@ jobs:
           context: .
           push: true
           tags: ${{secrets.DOCKER_USERNAME}}/${{secrets.DOCKER_REPOSITORY}}:latest
-          build-args: |
-            NEXT_PUBLIC_API_URL: ${{secrets.NEXT_PUBLIC_API_URL}}
     if: github.ref == 'refs/heads/main'
 
   deploy:

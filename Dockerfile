@@ -2,7 +2,7 @@
 FROM node:20
 
 # Create and set the working directory
-WORKDIR /usr/src/app
+WORKDIR /
 
 # Copy package.json and package-lock.json to the working directory
 COPY package*.json ./
@@ -13,17 +13,17 @@ RUN npm install
 # Copy the rest of the application code
 COPY . .
 
+RUN echo "NEXT_PUBLIC_API_URL=your_api_url_here" > .env.local
+
 # Expose the port that the application will run on
 EXPOSE 3000
 
 ARG NODE_ENV
 ARG PORT
-ARG NEXT_PUBLIC_API_URL
 
 # Set environment variables
 ENV NODE_ENV=production
 ENV PORT=3000
-ENV NEXT_PUBLIC_API_URL ${NEXT_PUBLIC_API_URL}
 # Add other environment variables as needed
 
 # Build the Next.js application
