@@ -44,8 +44,8 @@ jobs:
       - name: SSH to google cloud
         run: |
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ${{secrets.GCP_USERNAME}}@${{secrets.EXTERNAL_IP}} "
-          docker container rm -f kaloriku_backend || true &&
+          docker container rm -f kaloriku_frontend || true &&
           docker image rm -f ${{secrets.DOCKER_USERNAME}}/${{secrets.DOCKER_REPOSITORY}}:latest || true &&
           docker pull ${{secrets.DOCKER_USERNAME}}/${{secrets.DOCKER_REPOSITORY}}:latest &&
-          docker run --name kaloriku_backend -d -p 80:8000 ${{secrets.DOCKER_USERNAME}}/${{secrets.DOCKER_REPOSITORY}}:latest"
+          docker run --name kaloriku_frontend -d -p 81:3000 ${{secrets.DOCKER_USERNAME}}/${{secrets.DOCKER_REPOSITORY}}:latest"
     if: github.ref == 'refs/heads/main'
