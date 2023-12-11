@@ -1,11 +1,13 @@
 "use client"
 
-import { Button, Center, CircularProgress, Heading, SimpleGrid, Box, Flex, Spacer, IconButton, useDisclosure, Text } from '@chakra-ui/react';
+import { Button, Center, CircularProgress, Heading, SimpleGrid, Box, Flex, Spacer, IconButton, useDisclosure, Text, Grid } from '@chakra-ui/react';
 import { useUserContext } from "@/modules/auth/UserContext";
 import { useEffect, useRef, useState } from 'react';
 import { comfortaa } from '@/common/Style';
 import { useRouter } from 'next/navigation';
 import { useTargetContext } from '@/modules/target/TargetContext';
+import { useDaftarMakananDikonsumsiContext } from '@/modules/makanan_dikonsumsi/DaftarMakananDikonsumsiContext';
+import MakananDikonsumsiBox from '@/modules/makanan_dikonsumsi/MakananDikonsumsiBox';
 
 
 const Makanan = () => {
@@ -13,6 +15,7 @@ const Makanan = () => {
   const [itemsAmount, setItemsAmount] = useState(32);
   const { isAuthenticated } = useUserContext();
   const { target, isLoading, fetchTarget } = useTargetContext();
+  const { allMakananDikonsumsi, fetchDaftarMakananDikonsumsi } = useDaftarMakananDikonsumsiContext();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const initialized = useRef(false);
   const router = useRouter();
@@ -38,13 +41,16 @@ const Makanan = () => {
     if (!initialized.current && isAuthenticated) {
       initialized.current = true;
       fetchTarget();
+      fetchDaftarMakananDikonsumsi();
     }
   }, []);
 
   const editTarget = () => {
     router.push('/dashboard/edit')
 }
-
+  const addMakananDikonsumsi = () => {
+    router.push('./makanan')
+  }
   if (isLoading)
     return (
       <Center>
@@ -79,6 +85,24 @@ const Makanan = () => {
         <Button colorScheme='orange' mt={'50px'} onClick={editTarget}>Atur Target</Button>
 
 
+      </Box>
+            <Box px={'80px'} pt={'80px'}>
+        <Text fontSize={'26px'} className={comfortaa.className} pt={'20px'} fontWeight={'bold'} mb='0'>
+          Riwayat Makanan Dikonsumsi
+        </Text>
+        <Button colorScheme='orange' mt='5px' mb='10px' onClick={addMakananDikonsumsi}>Tambah Makanan Dikonsumsi</Button>
+        <Grid
+            gap={'30px'}
+            pb={'20px'}
+            pt={'20px'}
+            alignItems='center'
+            justifyItems='center'>
+          {allMakananDikonsumsi.length == 0 ?
+          <Center><Text py='10px'>{'Daftar makanan dikonsumsi masih kosong.'}</Text></Center> :
+          allMakananDikonsumsi.slice(0, itemsAmount).map((makananDikonsumsi) => (
+            <MakananDikonsumsiBox key={makananDikonsumsi.timeStamp} makananDikonsumsi={makananDikonsumsi} />
+          ))}
+        </Grid>
       </Box>
     </>
   );

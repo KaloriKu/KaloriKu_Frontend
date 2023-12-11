@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import './globals.css'
 import { UserContextProvider } from '@/modules/auth/UserContext'
 import { DaftarMakananContextProvider } from '@/modules/makanan/DaftarMakananContext'
+import { DaftarMakananDikonsumsiContextProvider } from '@/modules/makanan_dikonsumsi/DaftarMakananDikonsumsiContext'
 import Navbar from '@/modules/Navbar'
 import { ChakraProvider } from '@chakra-ui/react'
 import { inter } from '@/common/Style'
@@ -27,13 +28,12 @@ export default function RootLayout({
         <ChakraProvider>
           <UserContextProvider>
           <SetupContextProvider>
-
             <DaftarMakananContextProvider>
               <TargetContextProvider>
-                
-                  <Navbar />
-                  {children}
-                
+                <DaftarMakananDikonsumsiContextProvider>
+                <Navbar />
+                {children}
+                </DaftarMakananDikonsumsiContextProvider>
               </TargetContextProvider>
             </DaftarMakananContextProvider>
             </SetupContextProvider>
