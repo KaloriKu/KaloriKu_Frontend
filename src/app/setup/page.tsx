@@ -33,7 +33,7 @@ const SetUp = () => {
         'Authorization': `Bearer ${access}`
      },
       body: JSON.stringify({
-        usia: query['usia'],
+        umur: query['umur'],
         gender: query['gender'],
         berat_badan: query['beratBadan'],
         tinggi_badan: query['tinggiBadan'],
@@ -73,9 +73,9 @@ const SetUp = () => {
             <Text fontSize={'30px'} className={comfortaa.className} fontWeight={'bold'} mb='15px'>Lengkapi Profile</Text>
             <FormControl>
               <Text mb='5px' mt='10px'>Usia</Text>
-              <Input {...register('usia')}
-                id='usia'
-                name='usia'
+              <Input {...register('umur')}
+                id='umur'
+                name='umur'
                 w='100%'
                 focusBorderColor='orange.100'
                 _hover={{

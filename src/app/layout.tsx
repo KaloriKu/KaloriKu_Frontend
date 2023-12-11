@@ -5,6 +5,7 @@ import { DaftarMakananContextProvider } from '@/modules/makanan/DaftarMakananCon
 import Navbar from '@/modules/Navbar'
 import { ChakraProvider } from '@chakra-ui/react'
 import { inter } from '@/common/Style'
+import { TargetContextProvider } from '@/modules/target/TargetContext'
 
 export const metadata: Metadata = {
   title: 'KaloriKu',
@@ -25,8 +26,10 @@ export default function RootLayout({
         <ChakraProvider>
           <UserContextProvider>
             <DaftarMakananContextProvider>
-              <Navbar />
+              <TargetContextProvider>
+                <Navbar />
               {children}
+              </TargetContextProvider>
             </DaftarMakananContextProvider>
           </UserContextProvider>
         </ChakraProvider>
