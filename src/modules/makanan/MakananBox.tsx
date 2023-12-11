@@ -1,14 +1,23 @@
 import { Color } from "@/common/Style";
 import { MakananData } from "@/common/types/MakananData";
-import { Card, Stack, Heading, Text, Grid } from "@chakra-ui/react";
+import { Card, Stack, Heading, Text, Grid, Checkbox, Flex } from "@chakra-ui/react";
 import { useState } from 'react';
 
 interface MakananBoxProps {
-  makanan: MakananData
+  makanan: MakananData;
+  onCheckboxChange: (id: number, isChecked: boolean) => void;
 }
 
-const MakananBox: React.FC<MakananBoxProps> = ({ makanan }) => {
+const MakananBox: React.FC<MakananBoxProps> = ({ makanan, onCheckboxChange }) => {
   const [_, setIsHover] = useState(false);
+
+  const [isChecked, setIsChecked] = useState(false);
+
+  const toggleCheckbox = () => {
+    const newCheckedState = !isChecked;
+    setIsChecked(newCheckedState);
+    onCheckboxChange(makanan.id, newCheckedState);
+  };
 
   const over = () => {
     setIsHover(true);
@@ -18,7 +27,7 @@ const MakananBox: React.FC<MakananBoxProps> = ({ makanan }) => {
   }
 
   const makananClick = () => {
-    // TODO
+    toggleCheckbox();
   }
   return (
     <>
@@ -38,7 +47,10 @@ const MakananBox: React.FC<MakananBoxProps> = ({ makanan }) => {
         borderColor={Color.ONE}
         >
         <Stack m='2' spacing='1' p='8px'>
-          <Heading fontSize='18px' noOfLines={2} size='md' pb='5px'>{makanan.nama}</Heading>
+          <Flex justifyContent="space-between" alignItems="center">
+            <Heading fontSize='18px' noOfLines={2} size='md' pb='5px'>{makanan.nama}</Heading>
+            <Checkbox isChecked={isChecked} onChange={toggleCheckbox} colorScheme={'orange'}></Checkbox>
+          </Flex>
           <Grid templateColumns='repeat(2, 1fr)'>
           <Text fontSize='sm' isTruncated color='gray.700'>
             {'Kalori'}
