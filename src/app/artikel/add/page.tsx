@@ -10,7 +10,7 @@ import { useToast } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import { FaAngleLeft } from "react-icons/fa6";
 
-const addArtikel = () => {
+const AddArtikel = () => {
   const { handleSubmit, register } = useForm();
   const [isHover, setIsHover] = useState(false);
   const { access } = useUserContext()
@@ -28,7 +28,7 @@ const addArtikel = () => {
     router.back();
   }
 
-  const addArtikel = async (query: any) => {
+  const AddArtikel = async (query: any) => {
     const response = await fetch(
       process.env.NEXT_PUBLIC_API_URL +
       '/api/v1/artikel/add', {
@@ -79,7 +79,7 @@ const addArtikel = () => {
       <Center>
         
         <Box w='900px'>
-          <form onSubmit={handleSubmit(addArtikel)}>
+          <form onSubmit={handleSubmit(AddArtikel)}>
             <Text fontSize={'30px'} className={comfortaa.className} fontWeight={'bold'} mb='15px'>Tambah Artikel Baru</Text>
             <FormControl>
                <Text mb='5px' mt='10px'>Judul Artikel</Text>
@@ -125,4 +125,4 @@ const addArtikel = () => {
   );
 };
 
-export default addArtikel;
+export default AddArtikel;
