@@ -1,16 +1,15 @@
 'use client';
 import { comfortaa } from "@/common/Style";
 import { useUserContext } from "@/modules/auth/UserContext";
-import { Box, Image, InputGroup, InputLeftAddon } from '@chakra-ui/react'
+import { Box, FormControl, FormErrorMessage, Image, InputGroup, InputLeftAddon, useDisclosure } from '@chakra-ui/react'
 import { Flex, Spacer } from '@chakra-ui/react'
 import { Text } from '@chakra-ui/react'
 import { Center } from '@chakra-ui/react'
 import { Button } from '@chakra-ui/react'
-import { useRouter } from "next/navigation";
 import { Icon } from '@chakra-ui/react'
 import { FaDumbbell } from "react-icons/fa";
 import { TfiEmail } from "react-icons/tfi";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { FaGenderless } from "react-icons/fa";
 import { BsGenderMale } from "react-icons/bs";
 import { TbGenderFemme } from "react-icons/tb";
@@ -25,9 +24,33 @@ import {
     NumberDecrementStepper,
 } from '@chakra-ui/react'
 import { Select } from '@chakra-ui/react'
+import {
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalFooter,
+    ModalBody,
+    ModalCloseButton,
+} from '@chakra-ui/react'
+import { FaCheck, FaPerson } from "react-icons/fa6";
+import { FaKey } from "react-icons/fa";
+import { useToast } from '@chakra-ui/react'
+
+type AccountData = {
+    email?: string | null;
+    username?: string | null;
+    password?: string | null;
+    nama?: string | null;
+};
 
 export default function ProfileModule() {
+    const { isOpen, onOpen, onClose } = useDisclosure()
     const { user, authFetch } = useUserContext()
+    const [nama, setNama] = useState<string | null>(null)
+    const [email, setEmail] = useState<string | null>(null)
+    const [password1, setPassword1] = useState<string | null>("")
+    const [password2, setPassword2] = useState<string | null>("")
     const [foto, setFoto] = useState<string | undefined>()
     const [umur, setUmur] = useState(user?.umur)
     const [gender, setGender] = useState(user?.gender as string)
@@ -36,6 +59,8 @@ export default function ProfileModule() {
     const [isPressed, setIsPressed] = useState(false)
     const [padding, setPadding] = useState('0%')
     const [isLoading, setIsLoading] = useState(false)
+    const toast = useToast()
+    const isPasswordError = password1 === password2
 
     useEffect(() => {
         if (user?.gender === 'Laki-laki') {
@@ -63,7 +88,9 @@ export default function ProfileModule() {
         };
     }, [])
 
-    const editProfile = async () => {
+    const editProfile = async (e: any) => {
+        e.preventDefault()
+
         setIsLoading(true)
         await new Promise(resolve => setTimeout(resolve, 500));
         await authFetch(process.env.NEXT_PUBLIC_API_URL +
@@ -84,6 +111,51 @@ export default function ProfileModule() {
         )
         setIsLoading(false)
         window.location.reload()
+    }
+
+    const isNullOrEmptyString = (query: any) => {
+        if (query === '' || query === null) return true
+        return false
+    }
+
+    const isSameAsUser = (query: any) => {
+        if (query === user?.user.email) return true
+        return false
+    }
+
+    const editAccount = async (e: any) => {
+        e.preventDefault()
+        setIsLoading(true)
+
+        const body: AccountData = {}
+        console.log(password1)
+        if (!isNullOrEmptyString(nama)) body.nama = nama
+        if (!isNullOrEmptyString(email) && !isSameAsUser(email)) {
+            body.email = email
+            body.username = email
+        }
+        if (!isNullOrEmptyString(password1) && password1 === password2) body.password = password1
+        const promise = new Promise((resolve, reject) => {
+            setTimeout(() => {
+                setIsLoading(false);
+                if (response.status === 200) return resolve(200)
+                return reject(500)
+            }, 2500)
+        }).finally(() => { window.location.reload() })
+        const response = await authFetch(process.env.NEXT_PUBLIC_API_URL +
+            '/api/v1/profile/', {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
+        })
+
+        toast.promise(promise, {
+            success: { title: 'Account has been changed!', description: 'Looks great' },
+            error: { title: 'Changes rejected', description: 'Something wrong' },
+            loading: { title: 'Changes pending', description: 'Please wait' },
+        })
     }
 
 
@@ -219,7 +291,7 @@ export default function ProfileModule() {
                                                         </NumberInputStepper>
                                                     </NumberInput>
                                                 </InputGroup>
-                                                <Button colorScheme='gray' mt={'100px'} onClick={() => setIsPressed(!isPressed)} style={{ width: '100%' }}>Cancel</Button>
+                                                <Button colorScheme='gray' mt={'100px'} onClick={() => setIsPressed(!isPressed)} style={{ width: '100%' }} isDisabled={isLoading}>Cancel</Button>
                                                 <Button colorScheme='orange' mt={'5px'} onClick={editProfile} isLoading={isLoading} style={{ width: '100%' }}>Submit</Button>
                                             </Flex>
                                         </>
@@ -229,16 +301,53 @@ export default function ProfileModule() {
                         </Flex>
                     </Box>
                     <Box w='70%' px={'5%'}>
-
                         <Flex direction={'column'}>
                             <Text fontSize={'13px'} className={comfortaa.className} pt={'5px'}>
                                 Account
                             </Text>
-                            <Button colorScheme='gray' mt={'5px'} style={{ width: '100%' }}>
+                            <Button colorScheme='gray' mt={'5px'} style={{ width: '100%' }} onClick={onOpen}>
                                 <Text fontSize={'15px'} className={comfortaa.className} pt={'5px'}>
-                                    Change your account information
+                                    Change your account informations
                                 </Text>
                             </Button>
+
+                            <Modal isOpen={isOpen} onClose={onClose}>
+                                <ModalOverlay />
+                                <ModalContent>
+                                    <ModalHeader>Account Informations</ModalHeader>
+                                    <ModalCloseButton />
+                                    <ModalBody>
+                                        <Flex direction={'column'} gap={'5px'}>
+                                            <InputGroup>
+                                                <InputLeftAddon children={<Icon as={FaPerson} />} />
+                                                <Input id='form_nama' defaultValue={user?.nama} onChange={(e) => { setNama(e.target.value) }} />
+                                            </InputGroup>
+                                            <InputGroup>
+                                                <InputLeftAddon children={<Icon as={TfiEmail} />} />
+                                                <Input type='email' defaultValue={user?.user.email} onChange={(e) => { setEmail(e.target.value) }} />
+                                            </InputGroup>
+                                            <InputGroup>
+                                                <InputLeftAddon children={<Icon as={FaKey} />} />
+                                                    <Input type="password" onChange={(e) => { setPassword1(e.target.value) }} placeholder="Password" />
+                                            </InputGroup>
+                                            <InputGroup>
+                                                <InputLeftAddon children={<Icon as={FaCheck} />} />
+                                                <FormControl isInvalid={!isPasswordError}>
+                                                    <Input type="password" onChange={(e) => { setPassword2(e.target.value); }} placeholder="Confirm your password" />
+                                                    {!isPasswordError ? <FormErrorMessage>Password must be the same</FormErrorMessage> : <></>}
+                                                </FormControl>
+
+                                            </InputGroup>
+                                        </Flex>
+                                    </ModalBody>
+                                    <ModalFooter>
+                                        <Button colorScheme='orange' mr={3} isDisabled={isLoading} onClick={editAccount}>
+                                            Submit
+                                        </Button>
+                                        <Button variant='ghost' onClick={onClose} isDisabled={isLoading}>Cancel</Button>
+                                    </ModalFooter>
+                                </ModalContent>
+                            </Modal>
                         </Flex>
                     </Box>
                 </Flex>
