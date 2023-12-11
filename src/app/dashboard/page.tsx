@@ -1,9 +1,9 @@
 "use client"
 
-import { Button, Center, CircularProgress, Heading, SimpleGrid, Box, Flex, Spacer, IconButton, useDisclosure, Text } from '@chakra-ui/react';
+import { Button, Center, CircularProgress, Heading, SimpleGrid, Box, Flex, Spacer, IconButton, useDisclosure, Text, Grid, Collapse } from '@chakra-ui/react';
 import { useUserContext } from "@/modules/auth/UserContext";
 import { useEffect, useRef, useState } from 'react';
-import { comfortaa } from '@/common/Style';
+import { Color, comfortaa } from '@/common/Style';
 import { useRouter } from 'next/navigation';
 import { useTargetContext } from '@/modules/target/TargetContext';
 
@@ -14,6 +14,7 @@ const Makanan = () => {
   const { isAuthenticated } = useUserContext();
   const { target, isLoading, fetchTarget } = useTargetContext();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { allMakananDikonsumsi, fetchDaftarMakananDikonsumsi } = useDaftarMakananDikonsumsiContext();
   const initialized = useRef(false);
   const router = useRouter();
   const { user, access } = useUserContext()
@@ -23,6 +24,14 @@ const Makanan = () => {
       setClientWindowHeight(window.scrollY)
       setItemsAmount(itemsAmount + 12);
     }
+  };
+
+  const { isOpen, onToggle } = useDisclosure();
+  const [buttonText, setButtonText] = useState("Tampilkan Riwayat Makanan Dikonsumsi");
+  const handleToggle = () => {
+    onToggle();
+    setButtonText((prev) => (prev === "Tampilkan Riwayat Makanan Dikonsumsi" ? "Sembunyikan Riwayat Makanan Dikonsumsi" : "Tampilkan Riwayat Makanan Dikonsumsi"));
+
   };
 
   const back = () => {
@@ -78,8 +87,32 @@ const Makanan = () => {
 
         <Button colorScheme='orange' mt={'50px'} onClick={editTarget}>Atur Target</Button>
 
-
       </Box>
+      <Center>
+        <Button colorScheme='orange' mt={'50px'} onClick={handleToggle} width='370px' fontSize='md'>
+          {buttonText}
+        </Button>
+      </Center>
+      <Collapse in={isOpen} animateOpacity>
+        <Box px={'80px'} pt={'80px'}>
+          <Text fontSize={'26px'} className={comfortaa.className} pt={'20px'} fontWeight={'bold'} mb='0'>
+            Riwayat Makanan Dikonsumsi
+          </Text>
+          <Button colorScheme='orange' mt='5px' mb='10px' onClick={addMakananDikonsumsi}>Tambah Makanan Dikonsumsi</Button>
+          <Grid
+              gap={'30px'}
+              pb={'20px'}
+              pt={'20px'}
+              alignItems='center'
+              justifyItems='center'>
+            {allMakananDikonsumsi.length == 0 ?
+            <Center><Text py='10px'>{'Daftar makanan dikonsumsi masih kosong.'}</Text></Center> :
+            allMakananDikonsumsi.slice(0, itemsAmount).map((makananDikonsumsi) => (
+              <MakananDikonsumsiBox key={makananDikonsumsi.timeStamp} makananDikonsumsi={makananDikonsumsi} />
+            ))}
+          </Grid>
+        </Box>
+      </Collapse>
     </>
   );
 };
