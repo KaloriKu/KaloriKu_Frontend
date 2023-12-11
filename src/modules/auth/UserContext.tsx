@@ -108,7 +108,7 @@ export const UserContextProvider: React.FC<ChildrenProps> = ({
       update(data);
       setIsAuthenticated(true);
       await getUser(data['access'])
-      router.replace("/");
+      router.replace("/dashboard");
       toast({
         title: `Login`,
         description: `Berhasil masuk ke akun Anda`,
@@ -130,7 +130,6 @@ export const UserContextProvider: React.FC<ChildrenProps> = ({
   }
 
   const getUser = async(query:any) => {
-    console.log(access)
     const response = await fetch(
       process.env.NEXT_PUBLIC_API_URL +
       '/api/v1/profile', {
@@ -193,7 +192,6 @@ export const UserContextProvider: React.FC<ChildrenProps> = ({
       </main>
     )
   } else if (!isAuthenticated && (pathname != '/login' && pathname != '/register')) {
-    console.log('aaa');
     return (
       <main>
         <UnauthenticatedComponent />
