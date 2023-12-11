@@ -28,7 +28,7 @@ const AddArtikel = () => {
     router.back();
   }
 
-  const addArtikel = async (query: any) => {
+  const AddArtikel = async (query: any) => {
     const response = await fetch(
       process.env.NEXT_PUBLIC_API_URL +
       '/api/v1/artikel/add', {
@@ -79,7 +79,7 @@ const AddArtikel = () => {
       <Center>
         
         <Box w='900px'>
-          <form onSubmit={handleSubmit(addArtikel)}>
+          <form onSubmit={handleSubmit(AddArtikel)}>
             <Text fontSize={'30px'} className={comfortaa.className} fontWeight={'bold'} mb='15px'>Tambah Artikel Baru</Text>
             <FormControl>
                <Text mb='5px' mt='10px'>Judul Artikel</Text>

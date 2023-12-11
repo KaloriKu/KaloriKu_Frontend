@@ -6,15 +6,14 @@ import { useEffect, useRef, useState } from 'react';
 import { Color, comfortaa } from '@/common/Style';
 import { useRouter } from 'next/navigation';
 import { useTargetContext } from '@/modules/target/TargetContext';
-import { useDaftarMakananDikonsumsiContext } from '@/modules/makanan_dikonsumsi/DaftarMakananDikonsumsiContext';
-import MakananDikonsumsiBox from '@/modules/makanan_dikonsumsi/MakananDikonsumsiBox';
 
 
-const Dashboard = () => {
+const Makanan = () => {
   const [clientWindowHeight, setClientWindowHeight] = useState(300);
   const [itemsAmount, setItemsAmount] = useState(32);
   const { isAuthenticated } = useUserContext();
   const { target, isLoading, fetchTarget } = useTargetContext();
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const { allMakananDikonsumsi, fetchDaftarMakananDikonsumsi } = useDaftarMakananDikonsumsiContext();
   const initialized = useRef(false);
   const router = useRouter();
@@ -48,16 +47,13 @@ const Dashboard = () => {
     if (!initialized.current && isAuthenticated) {
       initialized.current = true;
       fetchTarget();
-      fetchDaftarMakananDikonsumsi();
     }
   }, []);
 
   const editTarget = () => {
     router.push('/dashboard/edit')
 }
-  const addMakananDikonsumsi = () => {
-    router.push('./makanan')
-  }
+
   if (isLoading)
     return (
       <Center>
@@ -90,6 +86,7 @@ const Dashboard = () => {
         }
 
         <Button colorScheme='orange' mt={'50px'} onClick={editTarget}>Atur Target</Button>
+
       </Box>
       <Center>
         <Button colorScheme='orange' mt={'50px'} onClick={handleToggle} width='370px' fontSize='md'>
@@ -120,4 +117,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default Makanan;
